@@ -1,4 +1,4 @@
-package config
+package tmplcreator
 
 import (
 	"os"
@@ -14,9 +14,9 @@ func NewEnvConfigCreator(projectDirectory string) *EnvConfigCreator {
 }
 
 func (e *EnvConfigCreator) Create() error {
-	err := os.MkdirAll(path.Join(e.projectDirectory, "configs"), 0666)
-	if err != nil && !os.IsExist(err) {
-		return err
+	createConfigFolderErr := os.MkdirAll(path.Join(e.projectDirectory, "configs"), 0666)
+	if createConfigFolderErr != nil && !os.IsExist(createConfigFolderErr) {
+		return createConfigFolderErr
 	}
 
 	return nil

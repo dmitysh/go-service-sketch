@@ -1,4 +1,4 @@
-package controller
+package tmplcreator
 
 type HTTPControllerCreator struct {
 }

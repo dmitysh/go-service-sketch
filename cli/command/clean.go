@@ -3,8 +3,7 @@ package command
 import (
 	"errors"
 	"github.com/DmitySH/go-service-sketch/cli"
-	"github.com/DmitySH/go-service-sketch/cli/creator/config"
-	"github.com/DmitySH/go-service-sketch/cli/creator/controller"
+	"github.com/DmitySH/go-service-sketch/cli/tmplcreator"
 	"github.com/DmitySH/go-service-sketch/pkg/maputils"
 	"github.com/spf13/cobra"
 )
@@ -17,6 +16,7 @@ type cleanOptions struct {
 	controller string
 	outDir     string
 	config     string
+	appName    string
 }
 
 var cleanOptionsValidations = []func(options *cleanOptions) error{
@@ -50,6 +50,7 @@ func NewCleanCommand(sketchCli *cli.SketchCli) *cobra.Command {
 	}
 
 	flags := cmd.Flags()
+	flags.StringVarP(&options.appName, "app-name", "n", "app", "Type of service controller ")
 	flags.StringVarP(&options.outDir, "out-dir", "o", "./app", "Path to directory with generated service template")
 	flags.StringVar(&options.config, "config", "", "Config type "+maputils.MapKeysToString(allowedConfigs))
 	flags.StringVar(&options.controller, "controller", "", "Type of service controller "+maputils.MapKeysToString(allowedControllers))
@@ -98,25 +99,28 @@ func runClean(_ *cobra.Command, _ *cli.SketchCli, options *cleanOptions) error {
 func initAllCreators(options *cleanOptions) []Creator {
 	var creators []Creator
 
-	creators = append(creators, controllerCreator(options.controller, options.outDir))
-	creators = append(creators, configCreator(options.config, options.outDir))
+	creators = append(creators,
+		tmplcreator.NewCommonCreator(options.outDir, options.appName),
+		configCreator(options),
+		controllerCreator(options),
+	)
 
 	return creators
 }
 
-func controllerCreator(controllerName, projectDirectory string) Creator {
-	switch controllerName {
+func controllerCreator(options *cleanOptions) Creator {
+	switch options.controller {
 	case "grpc":
-		return controller.NewGRPCControllerCreator(projectDirectory)
+		return tmplcreator.NewGRPCControllerCreator(options.outDir, options.appName)
 	default:
 		panic("unknown controller type")
 	}
 }
 
-func configCreator(configName, projectDirectory string) Creator {
-	switch configName {
+func configCreator(options *cleanOptions) Creator {
+	switch options.config {
 	case "env":
-		return config.NewEnvConfigCreator(projectDirectory)
+		return tmplcreator.NewEnvConfigCreator(options.outDir)
 	default:
 		panic("unknown config type")
 	}
