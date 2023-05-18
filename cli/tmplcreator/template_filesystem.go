@@ -16,4 +16,6 @@ var templatesFolder embed.FS
 const (
 	makefileTemplatePath  = "templates/makefile.txt"
 	gitignoreTemplatePath = "templates/gitignore.txt"
+	envUtilsTemplatePath  = "templates/env_config_utils.txt"
+	mainTemplatePath      = "templates/main.txt"
 )

@@ -9,12 +9,14 @@ import (
 type CommonCreator struct {
 	projectDirectory string
 	appName          string
+	moduleName       string
 }
 
-func NewCommonCreator(projectDirectory string, appName string) *CommonCreator {
+func NewCommonCreator(projectDirectory string, appName, moduleName string) *CommonCreator {
 	return &CommonCreator{
 		projectDirectory: projectDirectory,
 		appName:          appName,
+		moduleName:       moduleName,
 	}
 }
 
@@ -34,18 +36,22 @@ func (c *CommonCreator) createCommonFolders() error {
 	if createMainFolderErr != nil && !os.IsExist(createMainFolderErr) {
 		return createMainFolderErr
 	}
+
 	createInternalFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "internal"), defaultFolderPerm)
 	if createInternalFolderErr != nil && !os.IsExist(createInternalFolderErr) {
 		return createInternalFolderErr
 	}
+
 	createPkgFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "pkg"), defaultFolderPerm)
 	if createPkgFolderErr != nil && !os.IsExist(createMainFolderErr) {
 		return createPkgFolderErr
 	}
+
 	createLogsFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "logs"), defaultFolderPerm)
 	if createLogsFolderErr != nil && !os.IsExist(createLogsFolderErr) {
 		return createLogsFolderErr
 	}
+
 	createMigrationsFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "migrations"), defaultFolderPerm)
 	if createMigrationsFolderErr != nil && !os.IsExist(createMigrationsFolderErr) {
 		return createMigrationsFolderErr
@@ -58,11 +64,17 @@ func (c *CommonCreator) createCommonFiles() error {
 	if gitignoreErr := c.createGitignoreFile(); gitignoreErr != nil {
 		return gitignoreErr
 	}
+
 	if makefileErr := c.createMakefileFile(); makefileErr != nil {
 		return makefileErr
 	}
+
 	if logErr := c.createLogFile(); logErr != nil {
 		return logErr
+	}
+
+	if mainErr := c.createMainFile(); mainErr != nil {
+		return mainErr
 	}
 
 	return nil
@@ -93,7 +105,7 @@ func (c *CommonCreator) createMakefileFile() error {
 		return createErr
 	}
 	defer f.Close()
-	data := makefileTemplateData{AppName: c.appName}
+	var data = map[string]string{"AppName": c.appName}
 
 	tmpl, parseTmplErr := template.ParseFS(templatesFolder, makefileTemplatePath)
 	if parseTmplErr != nil {
@@ -113,6 +125,27 @@ func (c *CommonCreator) createLogFile() error {
 		return createErr
 	}
 	defer f.Close()
+
+	return nil
+}
+
+func (c *CommonCreator) createMainFile() error {
+	f, createErr := os.Create(path.Join(c.projectDirectory, "cmd", c.appName, "main.go"))
+	if createErr != nil {
+		return createErr
+	}
+	defer f.Close()
+
+	var data = map[string]string{"ModuleName": c.moduleName}
+
+	tmpl, parseTmplErr := template.ParseFS(templatesFolder, mainTemplatePath)
+	if parseTmplErr != nil {
+		return parseTmplErr
+	}
+
+	if executeErr := tmpl.Execute(f, data); executeErr != nil {
+		return executeErr
+	}
 
 	return nil
 }

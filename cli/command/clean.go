@@ -17,6 +17,7 @@ type cleanOptions struct {
 	outDir     string
 	config     string
 	appName    string
+	moduleName string
 }
 
 var cleanOptionsValidations = []func(options *cleanOptions) error{
@@ -54,6 +55,9 @@ func NewCleanCommand(sketchCli *cli.SketchCli) *cobra.Command {
 	flags.StringVarP(&options.outDir, "out-dir", "o", "./app", "Path to directory with generated service template")
 	flags.StringVar(&options.config, "config", "", "Config type "+maputils.MapKeysToString(allowedConfigs))
 	flags.StringVar(&options.controller, "controller", "", "Type of service controller "+maputils.MapKeysToString(allowedControllers))
+	flags.StringVar(&options.moduleName, "module-name", "", "Name of module in go mod init command")
+
+	_ = cmd.MarkFlagRequired("module-name")
 
 	return cmd
 }
@@ -100,7 +104,7 @@ func initAllCreators(options *cleanOptions) []Creator {
 	var creators []Creator
 
 	creators = append(creators,
-		tmplcreator.NewCommonCreator(options.outDir, options.appName),
+		tmplcreator.NewCommonCreator(options.outDir, options.appName, options.moduleName),
 		configCreator(options),
 		controllerCreator(options),
 	)
@@ -120,7 +124,7 @@ func controllerCreator(options *cleanOptions) Creator {
 func configCreator(options *cleanOptions) Creator {
 	switch options.config {
 	case "env":
-		return tmplcreator.NewEnvConfigCreator(options.outDir)
+		return tmplcreator.NewEnvConfigCreator(options.outDir, options.appName)
 	default:
 		panic("unknown config type")
 	}
