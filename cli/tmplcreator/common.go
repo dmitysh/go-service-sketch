@@ -6,16 +6,6 @@ import (
 	"path"
 )
 
-const (
-	defaultFolderPerm os.FileMode = 0666
-	defaultFilePerm   os.FileMode = 0666
-)
-
-const (
-	makefileTemplatePath  = "cli/tmplcreator/templates/makefile.txt"
-	gitignoreTemplatePath = "cli/tmplcreator/templates/gitignore.txt"
-)
-
 type CommonCreator struct {
 	projectDirectory string
 	appName          string
@@ -85,7 +75,7 @@ func (c *CommonCreator) createGitignoreFile() error {
 	}
 	defer f.Close()
 
-	tmpl, parseTmplErr := template.ParseFiles(gitignoreTemplatePath)
+	tmpl, parseTmplErr := template.ParseFS(templatesFolder, gitignoreTemplatePath)
 	if parseTmplErr != nil {
 		return parseTmplErr
 	}
@@ -105,7 +95,7 @@ func (c *CommonCreator) createMakefileFile() error {
 	defer f.Close()
 	data := makefileTemplateData{AppName: c.appName}
 
-	tmpl, parseTmplErr := template.ParseFiles(makefileTemplatePath)
+	tmpl, parseTmplErr := template.ParseFS(templatesFolder, makefileTemplatePath)
 	if parseTmplErr != nil {
 		return parseTmplErr
 	}
