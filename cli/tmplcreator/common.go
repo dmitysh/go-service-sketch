@@ -1,9 +1,14 @@
 package tmplcreator
 
 import (
-	"fmt"
+	"html/template"
 	"os"
 	"path"
+)
+
+const (
+	makefileTemplatePath  = "cli/tmplcreator/templates/makefile.txt"
+	gitignoreTemplatePath = "cli/tmplcreator/templates/gitignore.txt"
 )
 
 type CommonCreator struct {
@@ -64,9 +69,13 @@ func (c *CommonCreator) createGitignoreFile() error {
 	}
 	defer f.Close()
 
-	_, writerErr := f.WriteString(".idea\n")
-	if writerErr != nil {
-		return writerErr
+	tmpl, parseTmplErr := template.ParseFiles(gitignoreTemplatePath)
+	if parseTmplErr != nil {
+		return parseTmplErr
+	}
+
+	if executeErr := tmpl.Execute(f, nil); executeErr != nil {
+		return executeErr
 	}
 
 	return nil
@@ -78,13 +87,15 @@ func (c *CommonCreator) createMakefileFile() error {
 		return createErr
 	}
 	defer f.Close()
+	data := makefileTemplateData{AppName: c.appName}
 
-	_, writerErr := f.WriteString(fmt.Sprintf(`.PHONY: run
-run:
-	go run cmd/%s/main.go
-`, c.appName))
-	if writerErr != nil {
-		return writerErr
+	tmpl, parseTmplErr := template.ParseFiles(makefileTemplatePath)
+	if parseTmplErr != nil {
+		return parseTmplErr
+	}
+
+	if executeErr := tmpl.Execute(f, data); executeErr != nil {
+		return executeErr
 	}
 
 	return nil
