@@ -7,6 +7,11 @@ import (
 )
 
 const (
+	defaultFolderPerm os.FileMode = 0666
+	defaultFilePerm   os.FileMode = 0666
+)
+
+const (
 	makefileTemplatePath  = "cli/tmplcreator/templates/makefile.txt"
 	gitignoreTemplatePath = "cli/tmplcreator/templates/gitignore.txt"
 )
@@ -35,17 +40,25 @@ func (c *CommonCreator) Create() error {
 }
 
 func (c *CommonCreator) createCommonFolders() error {
-	createMainFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "cmd", c.appName), 0666)
+	createMainFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "cmd", c.appName), defaultFolderPerm)
 	if createMainFolderErr != nil && !os.IsExist(createMainFolderErr) {
 		return createMainFolderErr
 	}
-	createInternalFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "internal"), 0666)
+	createInternalFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "internal"), defaultFolderPerm)
 	if createInternalFolderErr != nil && !os.IsExist(createInternalFolderErr) {
 		return createInternalFolderErr
 	}
-	createPkgFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "pkg"), 0666)
+	createPkgFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "pkg"), defaultFolderPerm)
 	if createPkgFolderErr != nil && !os.IsExist(createMainFolderErr) {
 		return createPkgFolderErr
+	}
+	createLogsFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "logs"), defaultFolderPerm)
+	if createLogsFolderErr != nil && !os.IsExist(createLogsFolderErr) {
+		return createLogsFolderErr
+	}
+	createMigrationsFolderErr := os.MkdirAll(path.Join(c.projectDirectory, "migrations"), defaultFolderPerm)
+	if createMigrationsFolderErr != nil && !os.IsExist(createMigrationsFolderErr) {
+		return createMigrationsFolderErr
 	}
 
 	return nil
@@ -57,6 +70,9 @@ func (c *CommonCreator) createCommonFiles() error {
 	}
 	if makefileErr := c.createMakefileFile(); makefileErr != nil {
 		return makefileErr
+	}
+	if logErr := c.createLogFile(); logErr != nil {
+		return logErr
 	}
 
 	return nil
@@ -97,6 +113,16 @@ func (c *CommonCreator) createMakefileFile() error {
 	if executeErr := tmpl.Execute(f, data); executeErr != nil {
 		return executeErr
 	}
+
+	return nil
+}
+
+func (c *CommonCreator) createLogFile() error {
+	f, createErr := os.Create(path.Join(c.projectDirectory, "logs", "log.log"))
+	if createErr != nil {
+		return createErr
+	}
+	defer f.Close()
 
 	return nil
 }
