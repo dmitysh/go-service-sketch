@@ -1,0 +1,11 @@
+.PHONY: run
+run:
+	go run cmd/{{ .AppName }}/main.go
+
+.PHONY: up
+up:
+	docker-compose up --build {{ .AppName }}
+
+.PHONY: up-dev
+up-dev:
+	docker-compose up --build {{ .AppName }}-dev

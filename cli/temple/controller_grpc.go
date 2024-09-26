@@ -1,4 +1,4 @@
-package tmplcreator
+package temple
 
 import (
 	"os"

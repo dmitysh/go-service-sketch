@@ -1,0 +1,25 @@
+package app
+
+import (
+	"context"
+
+	"{{ .Module }}/internal/pkg/houston/closer"
+	"{{ .Module }}/internal/pkg/houston/loggy"
+)
+
+type App struct {
+	cfg Config
+}
+
+func NewApp(config Config) *App {
+	return &App{
+		cfg: config,
+	}
+}
+
+func (a *App) Run(ctx context.Context) error {
+	closer.Wait()
+	loggy.Sync()
+
+	return nil
+}

@@ -1,4 +1,4 @@
-package tmplcreator
+package temple
 
 type HTTPControllerCreator struct {
 }

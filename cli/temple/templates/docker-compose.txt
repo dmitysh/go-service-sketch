@@ -1,0 +1,12 @@
+services:
+  {{ .AppName }}:
+    container_name: {{ .AppName }}
+    build: .
+    env_file: prod.env
+    restart: on-failure
+
+  {{ .AppName }}-dev:
+    container_name: {{ .AppName }}-dev
+    build: .
+    env_file: docker.env
+    restart: on-failure

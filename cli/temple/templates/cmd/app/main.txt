@@ -1,0 +1,28 @@
+package main
+
+import (
+	"context"
+
+	"{{ .Module }}/internal/app"
+	"{{ .Module }}/internal/pkg/houston/closer"
+	"{{ .Module }}/internal/pkg/houston/config"
+	"{{ .Module }}/internal/pkg/houston/loggy"
+)
+
+func main() {
+	ctx, appCancel := context.WithCancel(context.Background())
+	defer appCancel()
+
+	cfg := app.Config{}
+	err := config.ReadAndParseYAML(&cfg)
+	if err != nil {
+		loggy.Fatal("can't read and parse config:", err)
+	}
+
+	closer.SetShutdownTimeout(config.Duration("app.graceful_shutdown_timeout"))
+
+	a := app.NewApp(cfg)
+	if err = a.Run(ctx); err != nil {
+		loggy.Fatalf("can't run app: %v", err)
+	}
+}

@@ -8,6 +8,6 @@ import (
 // AddAllCommands Adds all the commands from cli/command to the root command
 func AddAllCommands(cmd *cobra.Command, sketchCli *cli.SketchCli) {
 	cmd.AddCommand(
-		NewCleanCommand(sketchCli),
+		NewInitCommand(sketchCli),
 	)
 }

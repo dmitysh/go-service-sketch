@@ -1,10 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"github.com/DmitySH/go-service-sketch/cli"
 	"github.com/DmitySH/go-service-sketch/cli/command"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 const version = "0.0.1"
@@ -25,7 +26,7 @@ func runSketch(sketchCli *cli.SketchCli) error {
 func newSketchCommand(sketchCli *cli.SketchCli) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "sketch",
-		Short:   "Tool for creating Go service templates with onion architecture style",
+		Short:   "Tool for creating Go services",
 		Version: version,
 		CompletionOptions: cobra.CompletionOptions{
 			DisableDefaultCmd: true,
