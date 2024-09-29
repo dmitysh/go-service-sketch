@@ -15,10 +15,6 @@ var (
 	defaultOut      = os.Stdout
 )
 
-func init() {
-	InitDefault()
-}
-
 func InitDefault() {
 	SetGlobal(NewJSON(defaultOut))
 	Infoln("logger successfully inited")

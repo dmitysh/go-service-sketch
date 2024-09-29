@@ -18,8 +18,7 @@ func NewApp(config Config) *App {
 }
 
 func (a *App) Run(ctx context.Context) error {
-	closer.Wait()
-	loggy.Sync()
+    // TODO: your app
 
 	return nil
 }
