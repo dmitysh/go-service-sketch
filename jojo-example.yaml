@@ -1,0 +1,14 @@
+version: 1
+local_dependencies:
+  - file_path: command-processor/command-processor.proto
+    location: api/command-processor/command-processor.proto
+external_dependencies:
+  - file_path: google/api/annotations.proto
+    url: https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/annotations.proto
+    no_generate: true
+  - file_path: google/api/http.proto
+    url: https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/http.proto
+    no_generate: true
+
+  - file_path: chat/chat.proto
+    url: https://raw.githubusercontent.com/the-swiply/swiply-backend/main/chat/api/chat/chat.proto
