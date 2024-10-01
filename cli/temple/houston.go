@@ -24,7 +24,7 @@ func NewHoustonCreator(module, projectDir string) *HoustonCreator {
 		h.createLoggyInitFile,
 		h.createLoggyLogFile,
 		h.createSecretEnvFile,
-		h.createSecretGetLFile,
+		h.createSecretGetFile,
 		h.createSecretInitFile,
 		h.createStageFile,
 	}
@@ -87,13 +87,13 @@ func (h *HoustonCreator) createLoggyLogFile() error {
 }
 
 func (h *HoustonCreator) createSecretEnvFile() error {
-	return createFile(h.houstonPath("secret"), "get.go", houstonSecretGetPath,
+	return createFile(h.houstonPath("secret"), "env.go", houstonSecretEnvPath,
 		map[string]string{},
 	)
 }
 
-func (h *HoustonCreator) createSecretGetLFile() error {
-	return createFile(h.houstonPath("secret"), "get.go", houstonSecretEnvPath,
+func (h *HoustonCreator) createSecretGetFile() error {
+	return createFile(h.houstonPath("secret"), "get.go", houstonSecretGetPath,
 		map[string]string{},
 	)
 }

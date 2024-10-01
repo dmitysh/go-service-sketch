@@ -7,6 +7,7 @@ import (
 	"{{ .Module }}/internal/pkg/houston/closer"
 	"{{ .Module }}/internal/pkg/houston/config"
 	"{{ .Module }}/internal/pkg/houston/loggy"
+	"{{ .Module }}/internal/pkg/houston/secret"
 )
 
 func main() {
@@ -20,6 +21,8 @@ func main() {
 	if err != nil {
 		loggy.Fatal("can't read and parse config:", err)
 	}
+
+	secret.InitEnvProvider()
 
 	closer.SetShutdownTimeout(config.Duration("app.graceful_shutdown_timeout"))
 
