@@ -50,6 +50,7 @@ const (
 	houstonDobbyTransactionPath = "templates/internal/pkg/houston/dobby/transaction.txt"
 	houstonGrutInterceptorPath  = "templates/internal/pkg/houston/grut/interceptor.txt"
 	houstonGrutResponsePath     = "templates/internal/pkg/houston/grut/response.txt"
+	houstonGrutConnectPath      = "templates/internal/pkg/houston/grut/connect.txt"
 )
 
 // gRPC

@@ -28,6 +28,7 @@ func NewGRPCCreator(serviceName string) *GRPCCreator {
 		g.createJojoFile,
 		g.createGrutResponseFile,
 		g.createGrutInterceptorFile,
+		g.createGrutConnectFile,
 		g.createServerGRPCFile,
 		g.createServerHTTPFile,
 		g.createServerConfigFile,
@@ -110,6 +111,19 @@ func (g *GRPCCreator) createGrutResponseFile() error {
 	}
 
 	return createFile(houstonPath("grut"), "response.go", houstonGrutResponsePath,
+		map[string]string{
+			"Module": module,
+		},
+	)
+}
+
+func (g *GRPCCreator) createGrutConnectFile() error {
+	module, err := getProjectGoModule()
+	if err != nil {
+		return fmt.Errorf("can't get go module: %w", err)
+	}
+
+	return createFile(houstonPath("grut"), "connect.go", houstonGrutConnectPath,
 		map[string]string{
 			"Module": module,
 		},

@@ -1,0 +1,22 @@
+package grut
+
+import (
+	"fmt"
+
+	"{{ .Module }}/internal/pkg/houston/closer"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+func NewServiceClient[Client any](addr string, connWrapper func(_ grpc.ClientConnInterface) Client, dialOptions ...grpc.DialOption) (Client, error) {
+	dialOptions = append(dialOptions, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	conn, err := grpc.NewClient(addr, dialOptions...)
+	if err != nil {
+		var empty Client
+		return empty, fmt.Errorf("can't dial: %w", err)
+	}
+	closer.Add(conn.Close)
+
+	return connWrapper(conn), nil
+}
