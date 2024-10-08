@@ -7,10 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type Creator interface {
-	Create() error
-}
-
 type initOptions struct {
 	outDir     string
 	appName    string
@@ -35,7 +31,6 @@ func NewInitCommand(sketchCli *cli.SketchCli) *cobra.Command {
 	flags.StringVarP(&options.outDir, "out", "o", ".", "Path to directory with generated service template")
 	flags.StringVar(&options.moduleName, "module", "", "Name of module in go mod init command")
 	flags.StringVar(&options.goVersion, "go-ver", "", "Go version")
-	//flags.BoolVar(&options.grpc, "grpc", false, "Generate gRPC server")
 
 	_ = cmd.MarkFlagRequired("module")
 	_ = cmd.MarkFlagRequired("go-ver")

@@ -2,9 +2,6 @@ package app
 
 import (
 	"context"
-
-	"{{ .Module }}/internal/pkg/houston/closer"
-	"{{ .Module }}/internal/pkg/houston/loggy"
 )
 
 type App struct {

@@ -1,0 +1,6 @@
+package server
+
+type HTTPConfig struct {
+	Addr         string
+	GRPCEndpoint string
+}

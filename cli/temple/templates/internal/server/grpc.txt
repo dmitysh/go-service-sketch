@@ -1,0 +1,55 @@
+package server
+
+import (
+	"fmt"
+	"net"
+
+	"{{ .Module }}/internal/pb/{{ .ServiceName }}"
+	"{{ .Module }}/internal/pkg/houston/grut"
+	"{{ .Module }}/internal/pkg/houston/loggy"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+    grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"google.golang.org/grpc"
+)
+
+type GRPCServer struct {
+	{{ .ServiceNameSnake }}.Unimplemented{{ .ServiceNameCamel }}Server
+	gs *grpc.Server
+
+	addr string
+}
+
+func NewGRPCServer(addr string) *GRPCServer {
+	s := &GRPCServer{}
+	s.addr = addr
+
+	opts := []grpc.ServerOption{
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_recovery.UnaryServerInterceptor(grut.WithLogAndRecover()),
+		)),
+	}
+	s.gs = grpc.NewServer(opts...)
+	{{ .ServiceNameSnake }}.Register{{ .ServiceNameCamel }}Server(s.gs, s)
+
+	return s
+}
+
+func (g *GRPCServer) Run() error {
+	listener, err := net.Listen("tcp", g.addr)
+	if err != nil {
+		return fmt.Errorf("can't listen: %w", err)
+	}
+	defer listener.Close()
+
+	loggy.Infoln("starting grpc server on", g.addr)
+
+	if err = g.gs.Serve(listener); err != nil {
+		return fmt.Errorf("can't serve: %w", err)
+	}
+
+	return nil
+}
+
+func (g *GRPCServer) Shutdown() {
+	g.gs.GracefulStop()
+}

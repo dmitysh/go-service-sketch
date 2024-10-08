@@ -1,7 +1,6 @@
 package temple
 
 import (
-	"go.uber.org/multierr"
 	"os"
 	"path"
 )
@@ -12,6 +11,7 @@ type CommonCreatorParams struct {
 	ModuleName       string
 	GoVersion        string
 }
+
 type CommonCreator struct {
 	params         CommonCreatorParams
 	fileCreators   []func() error
@@ -50,25 +50,15 @@ func NewCommonCreator(params CommonCreatorParams) *CommonCreator {
 }
 
 func (c *CommonCreator) Create() error {
-	if err := c.createFolders(); err != nil {
+	if err := createFolders(c.folderCreators); err != nil {
 		return err
 	}
 
-	if err := c.createFiles(); err != nil {
+	if err := createFiles(c.fileCreators); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func (c *CommonCreator) createFolders() error {
-	var err error
-
-	for _, createFn := range c.folderCreators {
-		err = multierr.Append(err, createFn())
-	}
-
-	return err
 }
 
 func (c *CommonCreator) createServiceFolder() error {
@@ -96,16 +86,6 @@ func (c *CommonCreator) createUsecaseFolder() error {
 	}
 
 	return nil
-}
-
-func (c *CommonCreator) createFiles() error {
-	var err error
-
-	for _, createFn := range c.fileCreators {
-		err = multierr.Append(err, createFn())
-	}
-
-	return err
 }
 
 func (c *CommonCreator) createGitignoreFile() error {

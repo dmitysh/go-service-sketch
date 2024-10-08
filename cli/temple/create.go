@@ -1,10 +1,31 @@
 package temple
 
 import (
+	"go.uber.org/multierr"
 	"os"
 	"path"
 	"text/template"
 )
+
+func createFolders(folderCreators []func() error) error {
+	var err error
+
+	for _, createFn := range folderCreators {
+		err = multierr.Append(err, createFn())
+	}
+
+	return err
+}
+
+func createFiles(fileCreators []func() error) error {
+	var err error
+
+	for _, createFn := range fileCreators {
+		err = multierr.Append(err, createFn())
+	}
+
+	return err
+}
 
 func createFile(folderPath, filename, templatePath string, templateData map[string]string) error {
 	err := os.MkdirAll(folderPath, defaultFolderPerm)

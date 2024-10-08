@@ -1,10 +1,5 @@
 package temple
 
-import (
-	"go.uber.org/multierr"
-	"path"
-)
-
 type HoustonCreator struct {
 	module       string
 	projectDir   string
@@ -33,25 +28,15 @@ func NewHoustonCreator(module, projectDir string) *HoustonCreator {
 }
 
 func (h *HoustonCreator) Create() error {
-	if err := h.createFiles(); err != nil {
+	if err := createFiles(h.fileCreators); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (h *HoustonCreator) createFiles() error {
-	var err error
-
-	for _, createFn := range h.fileCreators {
-		err = multierr.Append(err, createFn())
-	}
-
-	return err
-}
-
 func (h *HoustonCreator) createCloserFile() error {
-	return createFile(h.houstonPath("closer"), "closer.go", houstonCloserPath,
+	return createFile(houstonPath("closer"), "closer.go", houstonCloserPath,
 		map[string]string{
 			"Module": h.module,
 		},
@@ -59,7 +44,7 @@ func (h *HoustonCreator) createCloserFile() error {
 }
 
 func (h *HoustonCreator) createConfigGetFile() error {
-	return createFile(h.houstonPath("config"), "get.go", houstonConfigGetPath,
+	return createFile(houstonPath("config"), "get.go", houstonConfigGetPath,
 		map[string]string{
 			"Module": h.module,
 		},
@@ -67,7 +52,7 @@ func (h *HoustonCreator) createConfigGetFile() error {
 }
 
 func (h *HoustonCreator) createConfigYAMLFile() error {
-	return createFile(h.houstonPath("config"), "yaml.go", houstonConfigYAMLPath,
+	return createFile(houstonPath("config"), "yaml.go", houstonConfigYAMLPath,
 		map[string]string{
 			"Module": h.module,
 		},
@@ -75,41 +60,37 @@ func (h *HoustonCreator) createConfigYAMLFile() error {
 }
 
 func (h *HoustonCreator) createLoggyInitFile() error {
-	return createFile(h.houstonPath("loggy"), "init.go", houstonLoggyInitPath,
+	return createFile(houstonPath("loggy"), "init.go", houstonLoggyInitPath,
 		map[string]string{},
 	)
 }
 
 func (h *HoustonCreator) createLoggyLogFile() error {
-	return createFile(h.houstonPath("loggy"), "log.go", houstonLoggyLogPath,
+	return createFile(houstonPath("loggy"), "log.go", houstonLoggyLogPath,
 		map[string]string{},
 	)
 }
 
 func (h *HoustonCreator) createSecretEnvFile() error {
-	return createFile(h.houstonPath("secret"), "env.go", houstonSecretEnvPath,
+	return createFile(houstonPath("secret"), "env.go", houstonSecretEnvPath,
 		map[string]string{},
 	)
 }
 
 func (h *HoustonCreator) createSecretGetFile() error {
-	return createFile(h.houstonPath("secret"), "get.go", houstonSecretGetPath,
+	return createFile(houstonPath("secret"), "get.go", houstonSecretGetPath,
 		map[string]string{},
 	)
 }
 
 func (h *HoustonCreator) createSecretInitFile() error {
-	return createFile(h.houstonPath("secret"), "init.go", houstonSecretInitPath,
+	return createFile(houstonPath("secret"), "init.go", houstonSecretInitPath,
 		map[string]string{},
 	)
 }
 
 func (h *HoustonCreator) createStageFile() error {
-	return createFile(h.houstonPath("stage"), "stage.go", houstonStagePath,
+	return createFile(houstonPath("stage"), "stage.go", houstonStagePath,
 		map[string]string{},
 	)
-}
-
-func (h *HoustonCreator) houstonPath(lastElem string) string {
-	return path.Join(h.projectDir, "internal", "pkg", "houston", lastElem)
 }

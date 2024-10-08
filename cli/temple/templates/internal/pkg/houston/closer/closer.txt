@@ -26,10 +26,12 @@ func Add(f ...func() error) {
 	instance.add(f...)
 }
 
-func NoErrAdapter(f func()) func() error {
-	return func() error {
-		f()
-		return nil
+func AddNoErr(f ...func()) {
+	for _, fi := range f {
+		instance.add(func() error {
+			fi()
+			return nil
+		})
 	}
 }
 

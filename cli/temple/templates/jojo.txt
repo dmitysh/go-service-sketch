@@ -1,0 +1,5 @@
+version: 1
+local_dependencies:
+  - file_path: {{ .ServiceName }}/service.proto
+    location: api/{{ .ServiceName }}/service.proto
+external_dependencies: []

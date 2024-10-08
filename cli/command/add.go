@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewJojoCommand(_ *cli.SketchCli) *cobra.Command {
+func NewAddCommand(_ *cli.SketchCli) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "jojo [COMMAND]",
-		Short: "Command to make life with Protobufs easier",
+		Use:   "add [COMMAND]",
+		Short: "Adds resource to existing sketch project",
 	}
 
 	return cmd
