@@ -1,7 +1,7 @@
 version: 1
 local_dependencies:
-  - file_path: command-processor/command-processor.proto
-    location: api/command-processor/command-processor.proto
+  - file_path: command-processor/command-processor.proto # Path to file in temporary internal filesystem where file will be copied
+    location: api/command-processor/command-processor.proto # Real path to .proto file
 external_dependencies:
   - file_path: google/api/annotations.proto
     url: https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/annotations.proto
