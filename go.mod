@@ -1,4 +1,4 @@
-module github.com/DmitySH/go-service-sketch
+module github.com/dmitysh/go-service-sketch
 
 go 1.24.0
 

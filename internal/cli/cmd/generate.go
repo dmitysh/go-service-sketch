@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/DmitySH/go-service-sketch/internal/jojo"
-	"github.com/DmitySH/go-service-sketch/internal/pkg/logger"
+	"github.com/dmitysh/go-service-sketch/internal/jojo"
+	"github.com/dmitysh/go-service-sketch/internal/pkg/logger"
 	"github.com/spf13/cobra"
 )
 

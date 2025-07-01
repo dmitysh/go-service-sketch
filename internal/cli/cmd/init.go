@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/DmitySH/go-service-sketch/internal/pkg/logger"
-	"github.com/DmitySH/go-service-sketch/internal/temple"
+	"github.com/dmitysh/go-service-sketch/internal/pkg/logger"
+	"github.com/dmitysh/go-service-sketch/internal/temple"
 	"github.com/spf13/cobra"
 )
 

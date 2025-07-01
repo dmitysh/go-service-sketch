@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/DmitySH/go-service-sketch/internal/pkg/fileutils"
-	"github.com/DmitySH/go-service-sketch/internal/pkg/logger"
+	"github.com/dmitysh/go-service-sketch/internal/pkg/fileutils"
+	"github.com/dmitysh/go-service-sketch/internal/pkg/logger"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 )

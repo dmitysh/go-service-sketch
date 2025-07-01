@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/DmitySH/go-service-sketch/internal/jojo/buf"
-	"github.com/DmitySH/go-service-sketch/internal/pkg/fileutils"
+	"github.com/dmitysh/go-service-sketch/internal/jojo/buf"
+	"github.com/dmitysh/go-service-sketch/internal/pkg/fileutils"
 	"golang.org/x/sync/errgroup"
 	"gopkg.in/yaml.v3"
 )

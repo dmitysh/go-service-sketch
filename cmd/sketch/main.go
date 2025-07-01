@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/DmitySH/go-service-sketch/internal/cli/cmd"
+	"github.com/dmitysh/go-service-sketch/internal/cli/cmd"
 )
 
 func main() {
