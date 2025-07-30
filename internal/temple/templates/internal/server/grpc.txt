@@ -51,5 +51,17 @@ func (g *GRPCServer) Run() error {
 }
 
 func (g *GRPCServer) Shutdown() {
-	g.gs.GracefulStop()
+	stopCh := make(chan struct{})
+
+    go func() {
+        g.gs.GracefulStop()
+        close(stopCh)
+    }()
+
+    select {
+    case <-ctx.Done():
+        return ctx.Err()
+    case <-stopCh:
+        return nil
+    }
 }

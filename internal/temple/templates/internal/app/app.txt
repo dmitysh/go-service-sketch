@@ -14,8 +14,6 @@ func NewApp(config Config) *App {
 	}
 }
 
-func (a *App) Run(ctx context.Context) error {
+func (a *App) Run(ctx context.Context) {
     // TODO: your app
-
-	return nil
 }
